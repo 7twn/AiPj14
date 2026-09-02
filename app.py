@@ -7,6 +7,18 @@ import streamlit.components.v1 as components
 # 圖表、儀表板、互動邏輯全部還是原本 HTML 檔案裡的 JavaScript 在跑，
 # Streamlit 沒有介入或改寫任何內容。
 
+# =========================================================================
+# 0. 置換favicon.ico
+# =========================================================================
+from PIL import Image
+# 讀取本地圖片
+icon = Image.open("favicon.ico")
+# 設定至頁面配置
+st.set_page_config(
+    page_title="第四組",
+    page_icon=icon
+)
+# =========================================================================
 st.set_page_config(
     page_title="Stress Score 分析儀表板",
     layout="wide",
