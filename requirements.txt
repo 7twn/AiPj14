@@ -1,7 +1,5 @@
-streamlit>=1.30
-
-sys
-http.server
-socketserver
-webbrowser
-threading
+streamlit
+plotly
+pandas
+joblib
+scikit-learn
