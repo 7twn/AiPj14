@@ -1,10 +1,21 @@
 import streamlit as st
 import streamlit.components.v1 as components
-
+# =========================================================================
+# 0. 置換favicon.ico(modified by:Shelley Chen
+# =========================================================================
+from PIL import Image
+# 讀取本地圖片
+icon = Image.open("favicon.ico")
+# 設定至頁面配置
 st.set_page_config(
-    page_title="目標:心理壓力",
-    layout="wide",
+    page_title="第四組",
+    page_icon=icon
 )
+# =========================================================================
+#st.set_page_config(
+#    page_title="目標:心理壓力",
+#    layout="wide",
+#)
 
 # 移除 Streamlit 預設的頁面留白/邊界，讓內嵌的 HTML 畫面看起來更完整
 st.markdown(
@@ -247,7 +258,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 <div class="grid-bg"></div>
 
 <div class="sidebar">
-  <div class="brand"><span class="dot"></span> Stress Score 分析儀表板</div>
+  <div class="brand"><span class="dot"></span>目標:心理壓力</div>
   <div class="tabs">
     <button class="tab-btn active" data-view="report">分析報告</button>
     <button class="tab-btn" data-view="gauge">即時預測</button>
