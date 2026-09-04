@@ -1,27 +1,39 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 stress_dashboard0903.py
-由 stress_dashboard0903.html 轉換而來。
+由 stress_dashboard0903.html 轉換而來，改寫為可部署在 Streamlit Cloud 上的版本。
 
-這支程式會啟動一個本機的簡易 HTTP 伺服器，直接把原本的 HTML/CSS/JavaScript
-儀表板內容原封不動地送出，讓你可以用瀏覽器開啟並保留原本的所有互動功能
-（分頁切換、8步驟流程、GAUGE 預測面板、拉桿試算等）。
+原本的版本是自己開一個 socketserver HTTP 伺服器，這種做法只能在「自己的電腦本機」
+執行，無法部署到 Streamlit Cloud（Streamlit Cloud 本身就是一個網頁伺服器，
+不允許你的程式再另外去綁定 port，會出現 OSError）。
 
-版面調整：選單已從原本的頂部橫向導覽列，改成左側固定選單欄（sidebar），
-使用方式與畫面互動邏輯完全不變，僅版面配置改動。
+這一版改用 Streamlit 官方支援的 streamlit.components.v1.html() 把整份
+HTML/CSS/JavaScript 儀表板直接嵌入頁面，畫面與互動效果（分頁切換、左側選單、
+8步驟流程、GAUGE 即時預測拉桿等）完全比照原本 HTML，不需要另外啟動伺服器。
 
 使用方式：
-    python3 stress_dashboard0903.py [PORT]
-
-預設 PORT 為 8000，啟動後在瀏覽器打開 http://localhost:8000/ 即可。
+    streamlit run stress_dashboard0903.py
+或直接部署到 Streamlit Cloud（把這支檔案設為 app 的進入點）。
 """
 
-import sys
-import http.server
-import socketserver
-import webbrowser
-import threading
+import streamlit as st
+import streamlit.components.v1 as components
+
+st.set_page_config(
+    page_title="Stress Score 分析儀表板",
+    layout="wide",
+)
+
+# 移除 Streamlit 預設的頁面留白/邊界，讓內嵌的 HTML 畫面看起來更完整
+st.markdown(
+    """
+    <style>
+        .block-container{ padding:0 !important; max-width:100% !important; }
+        header[data-testid="stHeader"]{ background:transparent; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 HTML_CONTENT = """<!DOCTYPE html>
 <html lang="zh-Hant">
@@ -971,44 +983,5 @@ predict();
 </html>
 """
 
-
-class DashboardHandler(http.server.BaseHTTPRequestHandler):
-    """只回應單一頁面的極簡 HTTP handler，內容就是原始的 HTML 檔案。"""
-
-    def do_GET(self):
-        body = HTML_CONTENT.encode("utf-8")
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
-
-    def log_message(self, format, *args):
-        # 安靜一點，避免每個 request 都印出 log
-        pass
-
-
-def main():
-    port = 8000
-    if len(sys.argv) > 1:
-        try:
-            port = int(sys.argv[1])
-        except ValueError:
-            print(f"無效的 PORT：{sys.argv[1]}，改用預設 8000")
-
-    with socketserver.TCPServer(("", port), DashboardHandler) as httpd:
-        url = f"http://localhost:{port}/"
-        print(f"Stress Score 分析儀表板伺服器啟動中： {url}")
-        print("按 Ctrl+C 停止伺服器。")
-
-        # 稍微延遲後自動開啟瀏覽器（可省略）
-        threading.Timer(0.5, lambda: webbrowser.open(url)).start()
-
-        try:
-            httpd.serve_forever()
-        except KeyboardInterrupt:
-            print("\n伺服器已停止。")
-
-
-if __name__ == "__main__":
-    main()
+# height 設高一點並開放 scrolling，讓長篇報告內容可以完整捲動閱讀
+components.html(HTML_CONTENT, height=2600, scrolling=True)
