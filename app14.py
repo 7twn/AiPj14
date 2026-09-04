@@ -8,7 +8,7 @@ from PIL import Image
 icon = Image.open("favicon.ico")
 # 設定至頁面配置
 st.set_page_config(
-    page_title="第四組",
+    page_title="目標:心理壓力",
     page_icon=icon
 )
 # =========================================================================
@@ -260,8 +260,8 @@ HTML_CONTENT = """<!DOCTYPE html>
 <div class="sidebar">
   <div class="brand"><span class="dot"></span>目標:心理壓力</div>
   <div class="tabs">
-    <button class="tab-btn active" data-view="report">分析報告</button>
-    <button class="tab-btn" data-view="gauge">即時預測</button>
+    <button class="tab-btn active" data-view="report">心理壓力-研究</button>
+    <button class="tab-btn" data-view="gauge">心理壓力-預測</button>
   </div>
 </div>
 
