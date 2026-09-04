@@ -1,26 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-stress_dashboard0903.py
-由 stress_dashboard0903.html 轉換而來，改寫為可部署在 Streamlit Cloud 上的版本。
-
-原本的版本是自己開一個 socketserver HTTP 伺服器，這種做法只能在「自己的電腦本機」
-執行，無法部署到 Streamlit Cloud（Streamlit Cloud 本身就是一個網頁伺服器，
-不允許你的程式再另外去綁定 port，會出現 OSError）。
-
-這一版改用 Streamlit 官方支援的 streamlit.components.v1.html() 把整份
-HTML/CSS/JavaScript 儀表板直接嵌入頁面，畫面與互動效果（分頁切換、左側選單、
-8步驟流程、GAUGE 即時預測拉桿等）完全比照原本 HTML，不需要另外啟動伺服器。
-
-使用方式：
-    streamlit run stress_dashboard0903.py
-或直接部署到 Streamlit Cloud（把這支檔案設為 app 的進入點）。
-"""
-
 import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(
-    page_title="Stress Score 分析儀表板",
+    page_title="目標:心理壓力",
     layout="wide",
 )
 
@@ -40,7 +22,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stress Score 分析儀表板</title>
+<title>目標:心理壓力</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
